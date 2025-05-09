@@ -22,33 +22,30 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-
-      - name: Install dependencies for frontend
-        run: |
-          cd front
-          npm install
-
-      - name: Install dependencies for backend
+      - name: Compile the project for backend
         run: |
           cd back
-          mvn install
+          mvn compile
 
-      - name: SonarCloud Scan for Backend
-        uses: SonarSource/sonarcloud-github-action@4006f663ecaf1f8093e8e4abb9227f6041f52216
+    #   - name: SonarCloud Scan for Backend
+    #     uses: SonarSource/sonarcloud-github-action@4006f663ecaf1f8093e8e4abb9227f6041f52216
+    #     with:
+    #       args: >
+    #         -Dsonar.projectKey=LefClem_BobApp
+    #         -Dsonar.organization=lefclem
+    #     env:
+    #       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Cache Maven packages
+        uses: actions/cache@v4.2.3
         with:
-          organization: 'lefclem'  # Remplace par ton organisation SonarCloud
-          projectKey: 'LefClem_BobApp_Backend'  # Remplace par ton projectKey pour le backend
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - name: SonarCloud Scan for Frontend
-        uses: SonarSource/sonarcloud-github-action@4006f663ecaf1f8093e8e4abb9227f6041f52216
-        with:
-          organization: 'lefclem'  # Remplace par ton organisation SonarCloud
-          projectKey: 'LefClem_BobApp_Frontend'  # Remplace par ton projectKey pour le frontend
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Build and analyze
+        run: |
+          cd back && mvn clean verify sonar:sonar \
+            -Dsonar.projectKey=LefClem_BobApp \
+            -Dsonar.organization=lefclem \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
