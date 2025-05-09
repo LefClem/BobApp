@@ -1,0 +1,54 @@
+name: SonarCloud Analysis
+
+on:
+  push:
+    branches:
+      - origin
+  pull_request:
+    branches: ["origin"]
+
+jobs:
+  sonar:
+    name: SonarCloud Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies for frontend
+        run: |
+          cd front
+          npm install
+
+      - name: Install dependencies for backend
+        run: |
+          cd back
+          mvn install
+
+      - name: SonarCloud Scan for Backend
+        uses: SonarSource/sonarcloud-github-action@4006f663ecaf1f8093e8e4abb9227f6041f52216
+        with:
+          organization: 'lefclem'  # Remplace par ton organisation SonarCloud
+          projectKey: 'LefClem_BobApp_Backend'  # Remplace par ton projectKey pour le backend
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: SonarCloud Scan for Frontend
+        uses: SonarSource/sonarcloud-github-action@4006f663ecaf1f8093e8e4abb9227f6041f52216
+        with:
+          organization: 'lefclem'  # Remplace par ton organisation SonarCloud
+          projectKey: 'LefClem_BobApp_Frontend'  # Remplace par ton projectKey pour le frontend
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
