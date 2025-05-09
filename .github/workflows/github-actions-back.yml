@@ -14,6 +14,10 @@ on:
   pull_request:
     branches: [ "origin" ]
 
+permissions:
+  contents: read
+  checks: write
+
 jobs:
   build:
 
@@ -33,3 +37,9 @@ jobs:
     - name: Test with Maven
       working-directory: ./back
       run: mvn clean test
+    - name: Upload test report summary
+      uses: phoenix-actions/test-reporting@v8
+      with:
+          name: Junit Tests
+          path: back/target/surefire-reports/*.xml
+          reporter: java-junit
