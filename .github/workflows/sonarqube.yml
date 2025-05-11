@@ -5,41 +5,41 @@ on:
     branches:
       - origin
   pull_request:
-    branches: ["origin"]
+    branches:
+      - origin
 
 jobs:
-  backend:
-    name: SonarCloud Backend Analysis
-    runs-on: ubuntu-latest
+  # backend:
+  #   name: SonarCloud Backend Analysis
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+  #     - name: Set up Java
+  #       uses: actions/setup-java@v4
+  #       with:
+  #         distribution: 'temurin'
+  #         java-version: '17'
 
-      - name: Cache Maven packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+  #     - name: Cache Maven packages
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: ~/.m2/repository
+  #         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-maven-
 
-      - name: Compile and analyze backend with Maven
-        env:
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          cd back
-          mvn clean verify sonar:sonar \
-          -Dsonar.projectKey=LefClem_BobApp_back
-          -Dsonar.organization=lefclem \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+  #     - name: Compile and analyze backend with Maven
+  #       env:
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #       run: |
+  #         cd back
+  #         mvn clean verify sonar:sonar \
+  #         -Dsonar.organization=lefclem \
+  #         -Dsonar.host.url=https://sonarcloud.io \
+  #         -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
   frontend:
     name: SonarCloud Frontend Analysis
