@@ -36,6 +36,7 @@ jobs:
         run: |
           cd back
           mvn clean verify sonar:sonar \
+          -Dsonar.projectKey=LefClem_BobApp_back
           -Dsonar.organization=lefclem \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
