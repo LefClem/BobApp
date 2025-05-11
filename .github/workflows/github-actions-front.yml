@@ -31,5 +31,5 @@ jobs:
       with:
         name: Karma Jasmine Tests
         path: front/test-results/test-results.xml
-        reporter: java-junit   
+        reporter: java-junit
     
