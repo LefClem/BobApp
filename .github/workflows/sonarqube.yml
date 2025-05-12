@@ -1,55 +1,70 @@
-name: SonarCloud Analysis
-
+name: My Test Monorepo Project
 on:
   push:
-    branches: ["origin"]
+    branches:
+      - origin
   pull_request:
-    branches: ["origin"]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  actions: read
+  security-events: read
 
 jobs:
-  backend:
-    name: SonarCloud - Backend
+  sonarqubeScan1:
+    name: SonarQubeScan1
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
         with:
-          java-version: 17
-          distribution: 'temurin'
+          fetch-depth: 0
+      - name: Install dependencies
+        working-directory: front
+        run: npm ci
 
+      - name: Run tests with coverage
+        working-directory: front
+        run: npm test
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+            projectBaseDir: front/
+            args: >
+              -Dsonar.scanner.provisionedJre.disable=true
+
+  sonarqubeScan2:
+    name: SonarQubeScan2
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - name: Build & Analyze backend
         working-directory: back
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BACK }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mvn clean verify sonar:sonar \
             -Dsonar.projectKey=lefclem_BobApp_Backend \
             -Dsonar.organization=lefclem \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN_BACK }}
-
-  frontend:
-    name: SonarCloud - Frontend
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Install deps & run tests
-        working-directory: front
-        run: |
-          npm install
-          npm run build
-          npm test
-
-      - name: Analyze frontend
-        uses: SonarSource/sonarcloud-github-action@v2.2.0
-        with:
-          projectBaseDir: front
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BACK }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            -Dsonar.login=${SONAR_TOKEN_BACK} \
+            -Dsonar.java.binaries=target/classes
