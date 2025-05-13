@@ -6,9 +6,13 @@ name: CI Frontend
 on:
   push:
     branches: [ "origin" ]
+    paths:
+      - 'front/**'
   pull_request:
     branches: [ "origin" ]
-
+    paths:
+      - 'front/**'
+      
 permissions:
   contents: read
   checks: write

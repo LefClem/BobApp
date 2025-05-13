@@ -11,8 +11,12 @@ name: CI Backend
 on:
   push:
     branches: [ "origin" ]
+    paths:
+      - 'back/**'
   pull_request:
     branches: [ "origin" ]
+    paths:
+      - 'back/**'
 
 permissions:
   contents: read

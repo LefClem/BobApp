@@ -12,8 +12,8 @@ permissions:
   security-events: read
 
 jobs:
-  sonarqubeScan1:
-    name: SonarQubeScan1
+  sonarqubeFrontend:
+    name: sonarqubeFrontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -37,8 +37,8 @@ jobs:
             args: >
               -Dsonar.scanner.provisionedJre.disable=true
 
-  sonarqubeScan2:
-    name: SonarQubeScan2
+  sonarqubeBackend:
+    name: sonarqubeBackend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
