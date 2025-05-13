@@ -41,6 +41,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -55,6 +57,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          context: "{{defaultContext}}:frontend"
-          file: build.Dockerfile
+          context: ./front
+          file: ./front/Dockerfile
           tags: ${{secrets.DOCKERHUB_USERNAME}}/${{secrets.DOCKER_HUB_CLIENT_IMAGE_NAME}}:latest
