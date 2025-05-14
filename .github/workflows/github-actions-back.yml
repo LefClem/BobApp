@@ -11,12 +11,12 @@ name: CI Backend
 on:
   push:
     branches: [ "origin" ]
-    paths:
-      - 'back/**'
+    # paths:
+    #   - 'back/**'
   pull_request:
     branches: [ "origin" ]
-    paths:
-      - 'back/**'
+    # paths:
+    #   - 'back/**'
 
 permissions:
   contents: read
@@ -47,3 +47,27 @@ jobs:
           name: Junit Tests
           path: back/target/surefire-reports/*.xml
           reporter: java-junit
+
+  docker:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_TOKEN}}
+      
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          context: ./back
+          file: ./back/Dockerfile
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/bobapp:${{secrets.DOCKER_HUB_SERVER_IMAGE_NAME}}
