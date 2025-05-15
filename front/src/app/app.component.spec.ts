@@ -18,4 +18,11 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
     
   });
+
+  it('should not have a Test value rendered', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('.test p').textContent).not.toContain('Test');
+  });
 });
