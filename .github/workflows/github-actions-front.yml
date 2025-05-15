@@ -43,6 +43,7 @@ jobs:
         files: ./front/coverage/bobapp/lcov.info
         token: ${{ secrets.CODECOV_TOKEN }}
         comment: false
+        requires_changes: false
   
   docker:
     needs: build
