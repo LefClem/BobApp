@@ -6,12 +6,12 @@ name: CI Frontend
 on:
   push:
     branches: [ "origin" ]
-    # paths:
-    #   - 'front/**'
+    paths:
+      - 'front/**'
   pull_request:
     branches: [ "origin" ]
-    # paths:
-    #   - 'front/**'
+    paths:
+      - 'front/**'
 
 permissions:
   contents: read
@@ -36,6 +36,13 @@ jobs:
         name: Karma Jasmine Tests
         path: front/test-results/test-results.xml
         reporter: java-junit
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v5
+      with:
+        files: ./front/coverage/bobapp/lcov.info
+        token: ${{ secrets.CODECOV_TOKEN }}
+        comment: false
   
   docker:
     needs: build
