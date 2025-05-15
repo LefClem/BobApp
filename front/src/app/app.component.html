@@ -9,7 +9,6 @@
         <div class="content" *ngIf="(joke$ | async) as joke">
           <p class="joke">{{ joke.joke }}</p>
           <p>{{ joke.response }}</p>
-          <p data-test-id="test">Test</p>
         </div>
       </mat-card-content>
       <mat-divider inset></mat-divider>
