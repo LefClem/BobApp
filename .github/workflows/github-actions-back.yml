@@ -9,12 +9,8 @@
 name: CI Backend
 
 on:
-  push:
-    branches: [ "origin" ]
-    paths:
-      - 'back/**'
   pull_request:
-    branches: [ "origin" ]
+    branches: [ "master" ]
     paths:
       - 'back/**'
 
@@ -49,6 +45,7 @@ jobs:
           reporter: java-junit
 
   docker:
+    if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
     steps:

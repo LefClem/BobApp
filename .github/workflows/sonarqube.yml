@@ -1,10 +1,9 @@
 name: My Test Monorepo Project
 on:
-  push:
-    branches:
-      - origin
   pull_request:
-    types: [opened, synchronize, reopened]
+      branches:
+        - master
+      types: [opened, synchronize, reopened]
 
 permissions:
   contents: read

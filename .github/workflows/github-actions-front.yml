@@ -4,12 +4,8 @@
 name: CI Frontend
 
 on:
-  push:
-    branches: [ "origin" ]
-    paths:
-      - 'front/**'
   pull_request:
-    branches: [ "origin" ]
+    branches: [ "master" ]
     paths:
       - 'front/**'
 
@@ -46,6 +42,7 @@ jobs:
         requires_changes: false
   
   docker:
+    if: github.ref == 'refs/heads/master'
     needs: build
     runs-on: ubuntu-latest
     steps:
