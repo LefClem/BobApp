@@ -9,6 +9,10 @@
 name: CI Backend
 
 on:
+  push:
+    branches: [ "master" ]
+    paths:
+      - 'back/**'
   pull_request:
     branches: [ "master" ]
     paths:
