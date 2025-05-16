@@ -1,4 +1,4 @@
-name: My Test Monorepo Project
+name: BobApp Analyze with SonarQube
 on:
   pull_request:
       branches:
@@ -7,8 +7,8 @@ on:
 
 permissions:
   contents: read
-  actions: read
-  security-events: read
+  pull-requests: write
+  checks: write 
 
 jobs:
   sonarqubeFrontend:
