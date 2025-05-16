@@ -10,7 +10,7 @@ import com.openclassrooms.bobapp.model.Joke;
 
 @Service
 public class JokeService {
-    
+
     private final JsonReader jsonReader;
 
     JokeService(JsonReader jsonReader) {
@@ -20,6 +20,7 @@ public class JokeService {
     public Joke getRandomJoke() {
         List<Joke> jokes = this.jsonReader.getJokes();
         Random generator = new Random();
+        System.out.println(jokes.size());
         int randomIndex = generator.nextInt(jokes.size());
         return jokes.get(randomIndex);
     }
