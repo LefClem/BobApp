@@ -21,7 +21,6 @@ public class JokeService {
         List<Joke> jokes = this.jsonReader.getJokes();
         Random generator = new Random();
         System.out.println(jokes.size());
-        System.out.println(generator.nextInt(jokes.size()));
         int randomIndex = generator.nextInt(jokes.size());
         return jokes.get(randomIndex);
     }
