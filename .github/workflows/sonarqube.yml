@@ -35,6 +35,11 @@ jobs:
             projectBaseDir: front/
             args: >
               -Dsonar.scanner.provisionedJre.disable=true
+              -Dsonar.newCode.referenceBranch=master
+              -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
+              -Dsonar.pullrequest.branch=${{ github.head_ref }}
+              -Dsonar.pullrequest.base=${{ github.base_ref }}
+              -Dsonar.qualitygate.wait=true
 
   sonarqubeBackend:
     name: sonarqubeBackend
