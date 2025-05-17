@@ -20,7 +20,6 @@ public class JokeService {
     public Joke getRandomJoke() {
         List<Joke> jokes = this.jsonReader.getJokes();
         Random generator = new Random();
-        System.out.println(jokes.size());
         int randomIndex = generator.nextInt(jokes.size());
         return jokes.get(randomIndex);
     }
