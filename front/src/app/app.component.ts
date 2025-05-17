@@ -20,6 +20,8 @@ export class AppComponent implements OnInit {
   }
 
   public getRandomJoke(): void {
+    console.log(this.joke$);
+    
     this.jokesService.getRandomJoke();
   }
 }
