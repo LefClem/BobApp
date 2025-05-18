@@ -34,12 +34,9 @@ jobs:
         with:
             projectBaseDir: front/
             args: >
-              -Dsonar.scanner.provisionedJre.disable=true
-              -Dsonar.newCode.referenceBranch=master
-              -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
-              -Dsonar.pullrequest.branch=${{ github.head_ref }}
-              -Dsonar.pullrequest.base=${{ github.base_ref }}
-              -Dsonar.qualitygate.wait=true
+              -Dsonar.scanner.provisionedJre.disable=true 
+              -Dsonar.newCode.referenceBranch=master 
+              -Dsonar.qualitygate.wait=true 
 
   sonarqubeBackend:
     name: sonarqubeBackend
@@ -71,4 +68,5 @@ jobs:
             -Dsonar.organization=lefclem \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${SONAR_TOKEN_BACK} \
+            -Dsonar.qualitygate.wait=true \
             -Dsonar.java.binaries=target/classes
