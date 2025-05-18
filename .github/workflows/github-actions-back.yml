@@ -13,10 +13,12 @@ on:
     branches: [ "master" ]
     paths:
       - 'back/**'
+      - '.github/workflows/github-actions-back.yml'
   pull_request:
     branches: [ "master" ]
     paths:
       - 'back/**'
+      - '.github/workflows/github-actions-back.yml'
 
 permissions:
   contents: read
@@ -65,10 +67,20 @@ jobs:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_TOKEN}}
       
+      - name: Extract metadata for tags
+        id: meta
+        run: |
+          SHA_SHORT=$(echo "${GITHUB_SHA}" | cut -c1-7)
+          DATE_TAG=$(date +'%Y%m%d')
+          VERSION_TAG="v-${DATE_TAG}-${SHA_SHORT}"
+          echo "version_tag=$VERSION_TAG" >> $GITHUB_OUTPUT
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          push: true
           context: ./back
           file: ./back/Dockerfile
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/bobapp:${{secrets.DOCKER_HUB_SERVER_IMAGE_NAME}}
+          push: true
+          tags: |
+              ${{ secrets.DOCKERHUB_USERNAME }}/bobappbackend:latest
+              ${{ secrets.DOCKERHUB_USERNAME }}/bobappbackend:${{ steps.meta.outputs.version_tag }}
