@@ -79,13 +79,6 @@ jobs:
           file: ./front/Dockerfile
           push: true
           tags: |
-              ${{ secrets.DOCKERHUB_USERNAME }}/bobappFrontend:latest
-              ${{ secrets.DOCKERHUB_USERNAME }}/bobappFrontend:${{ steps.meta.outputs.version_tag }}
-      
-      # - name: Build and push
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     push: true
-      #     context: ./front
-      #     file: ./front/Dockerfile
-      #     tags: ${{secrets.DOCKERHUB_USERNAME}}/bobapp:${{secrets.DOCKER_HUB_CLIENT_IMAGE_NAME}}
+              ${{ secrets.DOCKERHUB_USERNAME }}/bobappfrontend:latest
+              ${{ secrets.DOCKERHUB_USERNAME }}/bobappfrontend:${{ steps.meta.outputs.version_tag }}
+

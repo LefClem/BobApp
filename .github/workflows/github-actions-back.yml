@@ -82,5 +82,6 @@ jobs:
           file: ./back/Dockerfile
           push: true
           tags: |
-              ${{ secrets.DOCKERHUB_USERNAME }}/bobappBackend:latest
-              ${{ secrets.DOCKERHUB_USERNAME }}/bobappBackend:${{ steps.meta.outputs.version_tag }}
+              ${{ secrets.DOCKERHUB_USERNAME }}/bobappbackend:latest
+              ${{ secrets.DOCKERHUB_USERNAME }}/bobappbackend:${{ steps.meta.outputs.version_tag }}
+
