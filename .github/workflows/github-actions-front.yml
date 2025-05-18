@@ -8,10 +8,12 @@ on:
     branches: [ "master" ]
     paths:
       - 'front/**'
+      - '.github/workflows/github-actions-front.yml'
   pull_request:
     branches: [ "master" ]
     paths:
       - 'front/**'
+      - '.github/workflows/github-actions-front.yml'
 
 permissions:
   contents: read
@@ -61,11 +63,29 @@ jobs:
         with:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_TOKEN}}
-      
+
+      - name: Extract metadata for tags
+        id: meta
+        run: |
+              SHA_SHORT=$(echo "${GITHUB_SHA}" | cut -c1-7)
+              DATE_TAG=$(date +'%Y%m%d')
+              VERSION_TAG="v-${DATE_TAG}-${SHA_SHORT}"
+              echo "version_tag=$VERSION_TAG" >> $GITHUB_OUTPUT
+    
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          push: true
           context: ./front
           file: ./front/Dockerfile
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/bobapp:${{secrets.DOCKER_HUB_CLIENT_IMAGE_NAME}}
+          push: true
+          tags: |
+              ${{ secrets.DOCKERHUB_USERNAME }}/bobappFrontend:latest
+              ${{ secrets.DOCKERHUB_USERNAME }}/bobappFrontend:${{ steps.meta.outputs.version_tag }}
+      
+      # - name: Build and push
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     push: true
+      #     context: ./front
+      #     file: ./front/Dockerfile
+      #     tags: ${{secrets.DOCKERHUB_USERNAME}}/bobapp:${{secrets.DOCKER_HUB_CLIENT_IMAGE_NAME}}
