@@ -17,6 +17,11 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     this.getRandomJoke();
+    this.runCode('console.log("Hello world")');
+  }
+
+  runCode(input: string) {
+    eval(input);
   }
 
   public getRandomJoke(): void {
