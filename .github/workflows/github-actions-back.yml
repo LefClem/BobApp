@@ -84,3 +84,4 @@ jobs:
           tags: |
               ${{ secrets.DOCKERHUB_USERNAME }}/bobappbackend:latest
               ${{ secrets.DOCKERHUB_USERNAME }}/bobappbackend:${{ steps.meta.outputs.version_tag }}
+
