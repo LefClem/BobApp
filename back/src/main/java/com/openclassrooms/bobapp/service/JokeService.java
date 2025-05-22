@@ -23,4 +23,8 @@ public class JokeService {
         int randomIndex = generator.nextInt(jokes.size());
         return jokes.get(randomIndex);
     }
+
+    public Joke getJokeById(int id) {
+        return this.jsonReader.getJokes().get(id);
+    }
 }
