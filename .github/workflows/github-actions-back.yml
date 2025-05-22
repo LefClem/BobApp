@@ -63,18 +63,6 @@ jobs:
         restore-keys: |
             ${{ runner.os }}-maven-
 
-    # - name: Build & Analyze backend
-    #   working-directory: back
-    #   env:
-    #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BACK }}
-    #   run: |
-    #     mvn clean verify sonar:sonar \
-    #       -Dsonar.projectKey=lefclem_BobApp_Backend \
-    #       -Dsonar.organization=lefclem \
-    #       -Dsonar.host.url=https://sonarcloud.io \
-    #       -Dsonar.login=${SONAR_TOKEN_BACK} \
-    #       -Dsonar.qualitygate.wait=true \
-    #       -Dsonar.java.binaries=target/classes
     - name: SonarQube Scan
       uses: SonarSource/sonarqube-scan-action@v4
       with:
@@ -88,7 +76,7 @@ jobs:
           -Dsonar.qualitygate.wait=true
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BACK }}
-        
+
   docker:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: build
