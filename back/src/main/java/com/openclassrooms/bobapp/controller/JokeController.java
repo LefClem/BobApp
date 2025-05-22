@@ -22,9 +22,4 @@ public class JokeController {
         return ResponseEntity.ok(this.jokeService.getRandomJoke());
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<?> getJokeById(int id) {
-        System.out.println(id);
-        return ResponseEntity.ok(this.jokeService.getJokeById(id));
-    }
 }

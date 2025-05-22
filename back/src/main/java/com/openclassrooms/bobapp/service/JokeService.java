@@ -24,8 +24,4 @@ public class JokeService {
         return jokes.get(randomIndex);
     }
 
-    public Joke getJokeById(int id) {
-        System.out.println(id);
-        return this.jsonReader.getJokes().get(id);
-    }
 }
