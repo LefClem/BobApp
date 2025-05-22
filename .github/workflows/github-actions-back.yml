@@ -30,25 +30,52 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 11
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
-        java-version: '11'
+        java-version: '17'
         distribution: 'temurin'
         cache: maven
+
     - name: Build with Maven
       working-directory: ./back
       run: mvn -B package --file pom.xml
+
     - name: Test with Maven
       working-directory: ./back
       run: mvn clean test
+
     - name: Upload test report summary
       uses: phoenix-actions/test-reporting@v8
       with:
           name: Junit Tests
           path: back/target/surefire-reports/*.xml
           reporter: java-junit
+      
+    - name: Cache Maven packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+            ${{ runner.os }}-maven-
+
+    - name: SonarQube Scan
+      uses: SonarSource/sonarqube-scan-action@v4
+      with:
+        projectBaseDir: back/
+        args: >
+          -Dsonar.projectKey=lefclem_BobApp_Backend
+          -Dsonar.organization=lefclem
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.login=${{ secrets.SONAR_TOKEN_BACK }}
+          -Dsonar.java.binaries=target/classes
+          -Dsonar.qualitygate.wait=true
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BACK }}
 
   docker:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
