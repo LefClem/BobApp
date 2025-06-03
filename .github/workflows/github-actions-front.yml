@@ -41,9 +41,6 @@ jobs:
     - name: Launch tests and generate coverage
       working-directory: ./front
       run: npm test
-  
-    - name: Debug report generation
-      run: ls -la ./front/test-results
 
     - name: Upload coverage
       uses: phoenix-actions/test-reporting@v8
@@ -51,14 +48,6 @@ jobs:
         name: Karma Jasmine Tests
         path: front/test-results/test-results.xml
         reporter: java-junit
-    
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v5
-      with:
-        files: ./front/coverage/bobapp/lcov.info
-        token: ${{ secrets.CODECOV_TOKEN }}
-        comment: false
-        requires_changes: false
     
     - name: SonarQube Scan
       uses: SonarSource/sonarqube-scan-action@v4
